@@ -60,6 +60,7 @@ test('render range of HTML elements', async () => {
 
   expect(toString(elements)).toBe("<ul><li>1</li><li>2</li><li>3</li></ul>")
 })
+
 test('render/update object properties and DOM attributes', async () => {
   let lastChildren = []
 
@@ -129,6 +130,32 @@ test('attach/remove DOM event handler', async () => {
         expect(clicks).toBe(1) // doesn't trigger handler, which has been removed
       }
     }
+  ])
+})
+
+test('diff style-object properties', async () => {
+  await testUpdates([
+    {
+      content: <div style={{color: "red", backgroundColor: "blue"}}/>,
+      test: ([div]) => {
+        expect(div.style.color).toBe("red")
+        expect(div.style.backgroundColor).toBe("blue")
+      }
+    },
+    {
+      content: <div style={{color: "yellow", fontSize: "99px"}}/>,
+      test: ([div]) => {
+        expect(div.style.color).toBe("yellow")
+        expect(div.style.backgroundColor).toBe("")
+        expect(div.style.fontSize).toBe("99px")
+      }
+    },
+    {
+      content: <div/>,
+      test: ([div]) => {
+        expect(div.style.color).toBe("")
+      }
+    },
   ])
 })
 

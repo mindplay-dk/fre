@@ -12,8 +12,8 @@ export function updateElement (dom, oldProps, newProps) {
     const newValue = newProps[name]
 
     if (name === 'style') {
-      for (let k in oldValue) if (!newValue[k]) dom[name][k] = ''
-      for (let k in newValue) dom[name][k] = newValue[k]
+      for (let k in oldValue || {}) if (!newValue || !newValue[k]) dom[name][k] = ''
+      for (let k in newValue || {}) dom[name][k] = newValue[k]
     } else if (name[0] === 'o' && name[1] === 'n') {
       name = name.slice(2).toLowerCase()
       if (oldValue) dom.removeEventListener(name, oldValue)

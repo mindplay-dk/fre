@@ -276,3 +276,55 @@ test('diff style-object properties', async () => {
     },
   ])
 })
+
+test('dispatch component updates', async () => {
+  const numUpdates = {}
+  const update = {}
+
+  const Component = ({ id }) => {
+    const [count, setCount] = useState(0)
+
+    numUpdates[id] = (numUpdates[id] || 0) + 1
+
+    update[id] = () => setCount(count + 1)
+
+    return <div/>
+  }
+
+  const App = () => (
+    <div>
+      <Component id="a"/>
+      <Component id="b"/>
+    </div>
+  )
+
+  const content = <App/>
+
+  await testUpdates([
+    {
+      content,
+      test: ([div]) => {
+        expect(numUpdates.a).toBe(1)
+        expect(numUpdates.b).toBe(1)
+
+        update.a()
+      }
+    },
+    {
+      content, // ???
+      test: ([div]) => {
+        expect(numUpdates.a).toBe(2)
+        expect(numUpdates.b).toBe(1)
+
+        update.b()
+      }
+    },
+    {
+      content, // ???
+      test: ([div]) => {
+        expect(numUpdates.a).toBe(2)
+        expect(numUpdates.b).toBe(2)
+      }
+    }
+  ])
+})

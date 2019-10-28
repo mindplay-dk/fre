@@ -287,6 +287,59 @@ test('obtain reference to DOM element', async () => {
   expect(ref.current).toBe(elements[0])
 })
 
+test('obtain reference to DOM element via callback', async () => {
+  let updates = []
+
+  const update = from => ref => updates.push({ from, ref })
+
+  const content = (
+    <div ref={update("parent")}>
+      <div ref={update("child")}/>
+    </div>
+  )
+
+  await testUpdates([
+    {
+      content,
+      test: ([parent]) => {
+        const child = parent.children[0]
+
+        expect(updates).toStrictEqual([
+          { from: "parent", ref: parent },
+          { from: "child", ref: child }
+        ])
+
+        updates = []
+      }
+    },
+    {
+      content,
+      test: ([parent]) => {
+        const child = parent.children[0]
+
+        expect(updates).toStrictEqual([
+          // TODO expect null updates here? see https://github.com/132yse/fre/issues/97
+          //      { from: "parent", ref: null },
+          //      { from: "child", ref: null },
+          { from: "parent", ref: parent },
+          { from: "child", ref: child }
+        ])
+
+        updates = []
+      }
+    },
+    {
+      content: <p>removed</p>,
+      test: () => {
+        expect(updates).toStrictEqual([
+          { from: "parent", ref: null },
+          { from: "child", ref: null }
+        ])
+      }
+    },
+  ])
+})
+
 test('persist reference to any value', async () => {
   const Component = () => {
     const ref = useRef("")

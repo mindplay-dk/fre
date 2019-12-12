@@ -1,11 +1,13 @@
 /** @jsx h */
 
-import { test, withDOM } from "./setup"
+import { test } from "zora"
+import useDOM from 'jsdom-global'
 
 const h = (type, props, ...children) => ({ type, props, children })
 
-test(withDOM(async (is) => {
-  is.equal(1, 1)
+test("all that jazz", async (is) => {
+  const cleanDOM = useDOM()
+
   console.log(<div>foo</div>)
 
   document.body.appendChild(document.createElement("div"))
@@ -22,4 +24,6 @@ test(withDOM(async (is) => {
   })
 
   //is.equal(1, 2);
-}))
+
+  cleanDOM()
+})

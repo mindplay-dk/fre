@@ -1,14 +1,13 @@
-import tape from 'tape'
-import usePromise from 'tape-promise'
 import useDOM from 'jsdom-global'
 
-export const test = usePromise(tape);
-
 export function withDOM(test) {
-  return async (...args) => {
+  return async () => {
     const cleanDOM = useDOM()
-    const result = test(...args)
+
+    const result = await test()
+
     cleanDOM()
+
     return result
   }
 }

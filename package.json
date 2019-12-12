@@ -1,12 +1,13 @@
 {
   "name": "fre",
-  "version": "1.11.4",
+  "version": "1.11.5",
   "description": "",
   "main": "dist/fre.js",
   "unpkg": "dist/fre-umd.js",
   "module": "dist/fre-esm.js",
   "scripts": {
     "test": "tape -r @babel/register test/hello.test.js | tap-spec",
+    "test-key":"jest ./test/reconcilation.test.js",
     "build": "rollup -c && gzip-size dist/fre.js",
     "format": "prettier --write \"{src,test,demo}/**/*.js\""
   },

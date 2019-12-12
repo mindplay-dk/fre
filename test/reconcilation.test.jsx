@@ -37,8 +37,8 @@ test('reorder and reuse elements during key-based reconciliation of child-nodes'
         expect(children.map(el => el.textContent)).toStrictEqual(
           state.map(value => '' + value)
         )
-
-        if (stateNumber > 1) {
+        console.log(`state ${stateNumber}`) // TODO remove this and the test fails!?
+        if (stateNumber >= 1) {
           const lastState = states[stateNumber - 1]
           state.forEach((value, index) => {
             const lastIndex = lastState.indexOf(value)

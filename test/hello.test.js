@@ -17,7 +17,7 @@ test(withDOM(async (is) => {
 
       resolve()
 
-      //setTimeout(() => is.equal(1, 2), 100)
+      setTimeout(() => is.equal(1, 2), 2000)
     }, 1000)
   })
 

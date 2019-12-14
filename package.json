@@ -11,8 +11,8 @@
     "dist/*.map"
   ],
   "scripts": {
-    "test": "jest --coverage",
-    "test-key":"jest ./test/reconcilation.test.js",
+    "test": "mocha --require \"@babel/register\" test/h.test.jsx",
+    "test-key": "jest ./test/reconcilation.test.js",
     "build": "rollup -c && gzip-size dist/fre.js",
     "format": "prettier --write \"{src,test,demo}/**/*.js\"",
     "prepublish": "node prepublish.js"
@@ -27,12 +27,14 @@
     "@babel/preset-env": "^7.6.3",
     "@babel/preset-react": "^7.6.3",
     "@babel/preset-typescript": "^7.6.0",
-    "@types/jest": "^24.0.15",
-    "babel-jest": "^24.8.0",
+    "@babel/register": "^7.7.4",
+    "@types/chai": "^4.2.7",
+    "@types/mocha": "^5.2.7",
+    "chai": "^4.2.0",
     "codecov": "^3.6.1",
     "cross-env": "^5.2.0",
     "gzip-size-cli": "^3.0.0",
-    "jest": "^24.8.0",
+    "mocha": "^6.2.2",
     "prettier": "^1.19.1",
     "rollup": "^1.10.1",
     "rollup-plugin-babel": "^4.3.3",
@@ -44,11 +46,6 @@
     "yarpm": "^0.2.1"
   },
   "dependencies": {},
-  "jest": {
-    "coveragePathIgnorePatterns": [
-      "<rootDir>/test/test-util.js"
-    ]
-  },
   "prettier": {
     "singleQuote": true,
     "semi": false

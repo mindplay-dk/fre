@@ -14,10 +14,6 @@ export const [HOST, SVG, HOOK, PLACE, UPDATE, DELETE, NOWOEK] = [
   6
 ]
 export const isFn = fn => typeof fn === 'function'
-const defer =
-  typeof requestAnimationFrame === 'undefined'
-    ? setTimeout
-    : requestAnimationFrame
 
 let preCommit = null
 let currentFiber = null
@@ -218,7 +214,7 @@ function commit(fiber) {
       fiber.hooks.layout.forEach(cleanup)
       fiber.hooks.layout.forEach(effect)
       fiber.hooks.layout = []
-      defer(() => {
+      requestAnimationFrame(() => {
         fiber.hooks.effect.forEach(cleanup)
         fiber.hooks.effect.forEach(effect)
         fiber.hooks.effect = []

@@ -7,7 +7,7 @@
   "module": "dist/fre-esm.js",
   "scripts": {
     "test": "tape -r @babel/register test/reconcilation.test.jsx | tap-spec",
-    "test-key":"jest ./test/reconcilation.test.js",
+    "test-key": "jest ./test/reconcilation.test.js",
     "build": "rollup -c && gzip-size dist/fre.js",
     "format": "prettier --write \"{src,test,demo}/**/*.js\""
   },
@@ -28,7 +28,7 @@
     "cross-env": "^5.2.0",
     "gzip-size-cli": "^3.0.0",
     "jest": "^24.8.0",
-    "jsdom-global": "^3.0.2",
+    "jsdom": "^15.2.1",
     "prettier": "^1.19.1",
     "rollup": "^1.10.1",
     "rollup-plugin-babel": "^4.3.3",

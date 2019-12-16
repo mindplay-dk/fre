@@ -27,9 +27,8 @@ export const testUpdates = async updates => {
 
   await testRender(<Component />)
 
-  run(0)
-
-  for (let i = 1; i < updates.length; i++) {
+  for (let i = 0; i < updates.length; i++) {
+    console.log("AWAIT ", i)
     await new Promise(resolve => {
       effect = () => {
         console.log("RUN TEST ", i)
@@ -40,6 +39,7 @@ export const testUpdates = async updates => {
       console.log("SET CONTENT", i, updates[i].content, [...document.body.childNodes])
       setContent(updates[i].content)
     })
+    console.log("RESOLVED ", i)
   }
 
   console.log("RETURN")

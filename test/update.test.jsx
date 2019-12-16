@@ -38,6 +38,8 @@ test('async state update', withDOM(async is => {
       }
     }
   ])
+
+  console.log("TEST ENDS")
 }))
 
 // test('render/update object properties and DOM attributes', async () => {

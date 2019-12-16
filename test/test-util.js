@@ -15,7 +15,7 @@ export const testUpdates = async updates => {
   let setContent
 
   const Component = () => {
-    const [content, _setContent] = useState(updates[0].content)
+    const [content, _setContent] = useState('')
 
     setContent = _setContent
 

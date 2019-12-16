@@ -1,11 +1,12 @@
 /** @jsx h */
 
 import { h } from "../src/h"
+import { test } from "zora"
 
-test('create JSX node', () => {
+test('create JSX node', is => {
   const div = <div/>
 
-  expect(div).toStrictEqual({
+  is.deepEqual(div, {
     type: "div",
     key: null,
     ref: null,
@@ -13,10 +14,10 @@ test('create JSX node', () => {
   })
 })
 
-test('create JSX node with key and props', () => {
+test('create JSX node with key and props', is => {
   const div = <input key="foo" name="foo" value="bar"/>
 
-  expect(div).toStrictEqual({
+  is.deepEqual(div, {
     type: "input",
     key: "foo",
     ref: null,
@@ -27,7 +28,7 @@ test('create JSX node with key and props', () => {
   })
 })
 
-test('create JSX node with children', () => {
+test('create JSX node with children', is => {
   const divs = (
     <div key="a">
       <div key="b">
@@ -36,7 +37,7 @@ test('create JSX node with children', () => {
     </div>
   )
 
-  expect(divs).toStrictEqual({
+  is.deepEqual(divs, {
     type: "div",
     key: "a",
     ref: null,
@@ -58,10 +59,10 @@ test('create JSX node with children', () => {
   })
 })
 
-test('ignore `true`, `false`, `null` and `undefined` JSX literals', () => {
+test('ignore `true`, `false`, `null` and `undefined` JSX literals', is => {
   const div = <div>{true}{false}{null}{undefined}</div>
 
-  expect(div).toStrictEqual({
+  is.deepEqual(div, {
     type: "div",
     key: null,
     ref: null,
@@ -69,10 +70,10 @@ test('ignore `true`, `false`, `null` and `undefined` JSX literals', () => {
   })
 })
 
-test('emit JSX string/number literals', () => {
+test('emit JSX string/number literals', is => {
   const div = <div>{"hello"}{""}{123}</div>
 
-  expect(div).toStrictEqual({
+  is.deepEqual(div, {
     type: "div",
     key: null,
     ref: null,
@@ -86,12 +87,12 @@ test('emit JSX string/number literals', () => {
   })
 })
 
-test('emit JSX component nodes', () => {
+test('emit JSX component nodes', is => {
   const Component = ({ value }) => <input value={value}/>
 
   const div = <Component value={"foo"}>bar</Component>
 
-  expect(div).toStrictEqual({
+  is.deepEqual(div, {
     type: Component,
     key: null,
     ref: null,

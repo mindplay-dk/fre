@@ -1,8 +1,10 @@
 /** @jsx h */
-import { h, useState } from '../src/index'
+import { h } from '../src/index'
 import { testUpdates } from './test-util'
+import { test } from "zora"
+import { withDOM } from "./setup"
 
-test('reorder and reuse elements during key-based reconciliation of child-nodes', async () => {
+test('reorder and reuse elements during key-based reconciliation of child-nodes', withDOM(async is => {
   const states = [
     [1, 2, 3],
     [3, 1, 2], // shift right
@@ -33,20 +35,23 @@ test('reorder and reuse elements during key-based reconciliation of child-nodes'
       ),
       test: elements => {
         const children = [...elements[0].children]
-        children.pop()
-        expect(children.map(el => el.textContent)).toStrictEqual(
+
+        children.pop() // remove trailing key-less element
+
+        is.deepEqual(
+          children.map(el => el.textContent),
+
           state.map(value => '' + value)
         )
 
         if (stateNumber >= 1) {
           const lastState = states[stateNumber - 1]
+
           state.forEach((value, index) => {
             const lastIndex = lastState.indexOf(value)
 
             if (lastIndex !== -1) {
-              // console.log(`item ${value} position ${lastIndex} -> ${index}`)
-
-              expect(children[index]).toBe(lastChildren[lastIndex])
+              is.deepEqual(children[index], lastChildren[lastIndex])
             }
           })
         }
@@ -55,4 +60,4 @@ test('reorder and reuse elements during key-based reconciliation of child-nodes'
       }
     }))
   )
-})
+}))

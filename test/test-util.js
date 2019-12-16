@@ -9,7 +9,9 @@ export const testRender = jsx =>
   })
 
 export const testUpdates = async updates => {
-  let effect = () => {}
+  let effect = () => {
+    console.log("NOOP EFFECT")
+  }
   let setContent
 
   const Component = () => {
@@ -30,11 +32,15 @@ export const testUpdates = async updates => {
   for (let i = 1; i < updates.length; i++) {
     await new Promise(resolve => {
       effect = () => {
+        console.log("RUN TEST ", i)
         run(i)
+        console.log("RESOLVE ", i)
         resolve()
       }
-
+      console.log("SET CONTENT", i, updates[i].content, [...document.body.childNodes])
       setContent(updates[i].content)
     })
   }
+
+  console.log("RETURN")
 }

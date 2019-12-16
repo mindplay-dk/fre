@@ -5,7 +5,7 @@ import { JSDOM } from "jsdom"
 export const test = usePromise(tape)
 
 export function withDOM(test) {
-  return async (...args) => {
+  return (...args) => {
     const dom = new JSDOM('');
 
     const { window } = dom;

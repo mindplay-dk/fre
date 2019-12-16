@@ -4,7 +4,20 @@ import { scheduleCallback, shouldYeild } from './scheduler'
 import { createText } from './h'
 
 export const options = {}
-export const [HOST, SVG, HOOK, PLACE, UPDATE, DELETE] = [0, 1, 2, 3, 4, 5]
+export const [HOST, SVG, HOOK, PLACE, UPDATE, DELETE, NOWOEK] = [
+  0,
+  1,
+  2,
+  3,
+  4,
+  5,
+  6
+]
+export const isFn = fn => typeof fn === 'function'
+const defer =
+  typeof requestAnimationFrame === 'undefined'
+    ? setTimeout
+    : requestAnimationFrame
 
 let preCommit = null
 let currentFiber = null
@@ -30,9 +43,7 @@ export function scheduleWork(fiber) {
 }
 
 function reconcileWork(didout) {
-  if (!WIP) {
-    WIP = updateQueue.shift()
-  }
+  if (!WIP) WIP = updateQueue.shift()
   while (WIP && (!shouldYeild() || didout)) {
     try {
       WIP = reconcile(WIP)
@@ -57,8 +68,9 @@ function reconcile(WIP) {
   while (WIP) {
     if (!preCommit && WIP.dirty === false) {
       preCommit = WIP
+      return null
     }
-    if (WIP.sibling && WIP.dirty == null) {
+    if (WIP.sibling) {
       return WIP.sibling
     }
     WIP = WIP.parent
@@ -153,9 +165,7 @@ function reconcileChildren(WIP, children) {
     prevFiber = newFiber
   }
 
-  if (prevFiber) {
-    prevFiber.sibling = null
-  }
+  if (prevFiber) prevFiber.sibling = null
   WIP.dirty = WIP.dirty ? false : null
 }
 
@@ -164,15 +174,9 @@ function cloneChildren(fiber) {
 
   let child = fiber.child
   let newChild = child
+  newChild.op = NOWOEK
   fiber.child = newChild
   newChild.parent = fiber
-
-  while (child.sibling) {
-    child = child.sibling
-    newChild = newChild.sibling = child
-    newChild.parent = fiber
-  }
-
   newChild.sibling = null
 }
 
@@ -203,9 +207,10 @@ function commit(fiber) {
   let parent = fiber.parentNode
   let dom = fiber.node
   let ref = fiber.ref
-  if (op === DELETE) {
+  if (op === NOWOEK) {
+  } else if (op === DELETE) {
     fiber.hooks && fiber.hooks.list.forEach(e => e[2] && e[2]())
-    delRef(fiber.kids)
+    cleanupRef(fiber.kids)
     while (fiber.tag === HOOK) fiber = fiber.child
     parent.removeChild(fiber.node)
   } else if (fiber.tag === HOOK) {
@@ -256,12 +261,6 @@ function hashfy(arr) {
   return out
 }
 
-export const isFn = fn => typeof fn === 'function'
-const defer =
-  typeof requestAnimationFrame === 'undefined'
-    ? setTimeout
-    : requestAnimationFrame
-
 const cleanup = e => e[2] && e[2]()
 const effect = e => {
   const res = e[0]()
@@ -272,11 +271,11 @@ function refer(ref, dom) {
   if (ref) isFn(ref) ? ref(dom) : (ref.current = dom)
 }
 
-function delRef(kids) {
+function cleanupRef(kids) {
   for (const k in kids) {
     const kid = kids[k]
     refer(kid.ref, null)
-    if (kid.kids) delRef(kid.kids)
+    if (kid.kids) cleanupRef(kid.kids)
   }
 }
 
